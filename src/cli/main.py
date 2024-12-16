@@ -1,13 +1,12 @@
 #!/usr/bin/python3
 
 import sys
-import re
 import logging
-from typing import Callable, List
+from typing import Callable
 
 from interfaces import UIState, ConnectionIDSink, CommandSink
 from core import matcher, ConnectionManager
-from core.util import check_gdb, set_color_output, set_verbose, color
+from core.util import check_gdb, set_color_output, set_verbose
 from core.wl import protocol
 from frontends.tui import Controller, TerminalUI, parse_args, Arguments, Mode
 from backends.libwayland_debug_output import parse, run_program
@@ -20,18 +19,20 @@ set_verbose(False)
 if sys.version_info[0] < 3 or sys.version_info[1] < 8:
     logging.error('Needs at least Python 3.8!')
 
+
 def piped_input_main(output: Output, connection_id_sink: ConnectionIDSink) -> None:
     logging.info('Getting input piped from stdin')
     parse.into_sink(sys.stdin, output, connection_id_sink)
     logging.info('Done with input')
 
+
 def file_input_main(
-    file_path: str,
-    output: Output,
-    connection_id_sink: ConnectionIDSink,
-    command_sink: CommandSink,
-    ui_state: UIState,
-    input_func: Callable[[str], str]
+        file_path: str,
+        output: Output,
+        connection_id_sink: ConnectionIDSink,
+        command_sink: CommandSink,
+        ui_state: UIState,
+        input_func: Callable[[str], str]
 ) -> None:
     ui = TerminalUI(command_sink, ui_state, input_func)
     logging.info('Opening ' + file_path)
@@ -43,6 +44,7 @@ def file_input_main(
         output.error(file_path + ' not found')
     ui.run_until_stopped()
     logging.info('Done with file')
+
 
 def main(args: Arguments, output: Output, input_func: Callable[[str], str]) -> None:
     # If we want to run inside GDB, the rest of main does not get called in this instance of the script
@@ -74,7 +76,8 @@ def main(args: Arguments, output: Output, input_func: Callable[[str], str]) -> N
         else:
             assert False, 'invalid mode ' + repr(args.mode)
 
-if __name__ == '__main__':
+
+def run():
     if check_gdb():
         out_stream, err_stream = gdb_plugin.plugin.output_streams()
     else:
@@ -89,3 +92,7 @@ if __name__ == '__main__':
     except RuntimeError as e:
         logging.error(e)
         exit(1)
+
+
+if __name__ == '__main__':
+    run()

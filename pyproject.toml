@@ -1,0 +1,60 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "wayland-debug"
+version = "0.1.0"
+description = "A command line tool to help debug Wayland clients and servers"
+readme = "readme.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Sophie Winter", email = "git@phie.me" },
+]
+keywords = [
+    "wayland",
+    "debug",
+    "protocol",
+    "cli",
+    "gdb",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Topic :: Software Development :: Debuggers",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+]
+dependencies = [
+    "pytest>=7.0",
+]
+
+[project.scripts]
+wayland-debug = "cli.main:run"
+
+[project.entry-points."pipx.run"]
+wayland-debug = "cli.main:run"
+
+[project.optional-dependencies]
+dev = [
+    "pytest-cov>=4.0",
+    "black>=23.0",
+    "isort>=5.0",
+    "mypy>=1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/wmww/wayland-debug"
+Documentation = "https://github.com/wmww/wayland-debug#readme"
+Issues = "https://github.com/wmww/wayland-debug/issues"
+Repository = "https://github.com/wmww/wayland-debug.git"
+
+[tool.hatch.build.targets.wheel]
+only-include = ["src"]
+sources = ["src"]
